@@ -27,11 +27,11 @@ int achaLinha(int linha, int coluna, int matriz[5][8]) { //acha a linha para a p
 }
 
 int main() {
-	int matriz[5][8] = {{30, 0, 0, 20, -15, 0, 0, 0},
+	int matriz[5][8] = {{30, 0, 0, 20, 0, 0, -15, 0},
                      {-30, 50, 0, 0, 0, -10, 0, 0},
-                     {0, 0, 0, 0, 15, 10, 5, -10},
-                     {0, 50, -30, 0, 0, 0, -5, 0},
-                     {0, 0, 30, -20, 0, 0, 0, 10}};
+                     {0, 0, 0, 0, -10, 10, 15, 5},
+                     {0, 50, -30, 0, 0, 0, 0, -5},
+                     {0, 0, 30, -20, 10, 0, 0, 0}};
 
 	/*int matrizB[7][9] = {{2, 0, 12, 0, 0, 6, 0, 0, 0},
 						 {-2, 1, 0, 0, 0, 0, 0, 0, 5},
@@ -47,7 +47,7 @@ int main() {
 	int jaPassou[5];
 	
 
-	while(vLidos < tVertices-1) {	
+	while(vLidos < tVertices) {	
 		verticeAtual = proxVertice; //linha
 		jaPassou[vLidos] = verticeAtual;
 		vLidos++;
@@ -60,7 +60,7 @@ int main() {
 
 	
 	printf("Vertices Lidos: %d\n",vLidos);
-	for(int i = 0; i < 4; i++){
+	for(int i = 0; i < 5; i++){
 		printf("Leu -> %d	", jaPassou[i]+1);
 		if(i==0){
 			totalPercorido+=matriz[0][jaPassou[i]];
