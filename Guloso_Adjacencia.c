@@ -13,6 +13,7 @@ int caminhoMenor(int verticeAtual,int matriz[5][5]){
 			}			
 		}
 	}
+	printf("menor> %d\n", menor);
 	return vertice;
 }
 int caminhoMenorB(int verticeAtual,int matriz[7][7]){
@@ -74,7 +75,7 @@ int main(int argc, char *argv[]) {
 	int totalVertices = 5;
 	int proximoVertice = 0;
 	while(countVerticesLidos<totalVertices){
-		//printf("\n-> %d \n",proximoVertice+1);
+		printf("\n-> %d \n",proximoVertice+1);
 		verticeAtual = proximoVertice;
 		jaPassou[countVerticesLidos]=verticeAtual;
 		countVerticesLidos++;

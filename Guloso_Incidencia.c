@@ -1,37 +1,42 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+int totalPercorido=0;
 int menorCaminho(int verticeAtual, int matriz[5][8]) { //achar o menor caminho do grafo
-	int menor = 1000, vertice = 0, j;
+	int menor = 1000;
+	int coluna = -1;
 	
-	for(j = 0; j < 8; j++) { //vai achar o menor valor na linha
+	for(int j = 0; j < 8; j++) { //vai achar o menor valor na linha
 		if((matriz[verticeAtual][j] < menor) && (matriz[verticeAtual][j] > 0)) {
 			menor = matriz[verticeAtual][j];
-			vertice = j;
+			coluna = j;			
 		}
 	}
-	printf("menor>%d\n", menor);
-	return vertice; //retorna a coluna com o menor valor
+//	printf("menor> %d\n", menor);
+	return coluna; //retorna a coluna com o menor valor
 }
 
 int achaLinha(int linha, int coluna, int matriz[5][8]) { //acha a linha para a proxima procura no menor caminho
 	int valor = matriz[linha][coluna];
-	int i, procura;
-
-	procura = valor - valor*2;
-	for(i = 0; i < 5; i++) {
-		if(matriz[i][coluna] == procura) break;
-	}
-	
-	return i;
+	int proximoVertice=-1;
+	for(int i = 0; i < 5; i++) {
+		if(matriz[i][coluna] == valor*-1 && i!=linha){
+			proximoVertice	=	i;
+			break;	
+		}else if(matriz[i][coluna] == valor&& i!=linha){
+			proximoVertice	=	i;
+			break;	
+		} 
+	}	
+//	totalPercorido+=valor;
+	return proximoVertice;
 }
 
 int main() {
-	int matriz[5][8] = {{30, 0, 0, 20, 0, 0, -15, 0},
-                     {-30, 50, 0, 0, 0, -10, 0, 0},
-                     {0, 0, 0, 0, -10, 10, 15, 5},
-                     {0, 50, -30, 0, 0, 0, 0, -5},
-                     {0, 0, 30, -20, 10, 0, 0, 0}};
+	int matriz[5][8] = {{30, 	0, 	0, 	20, 0,		0, 		-15, 0},
+                     	{-30, 	50, 0, 	0, 	0, 		-10, 	0, 0},
+                     	{0, 	0, 	0, 	0, 	-10, 	10, 	15, 5},
+                     	{0, 	50, -30,0, 	0, 		0, 		0, -5},
+                    	{0, 	0, 	30, -20,10, 	0, 		0, 0}};
 
 	/*int matrizB[7][9] = {{2, 0, 12, 0, 0, 6, 0, 0, 0},
 						 {-2, 1, 0, 0, 0, 0, 0, 0, 5},
@@ -43,32 +48,28 @@ int main() {
 	*/
 
 	int vLidos = 0, tVertices = 5;
-	int proxVertice = 0, verticeAtual, totalPercorido, linha;
+	int proxVertice = 0, verticeAtual, linha;
 	int jaPassou[5];
 	
 
-	while(vLidos < tVertices) {	
+	do {	
 		verticeAtual = proxVertice; //linha
 		jaPassou[vLidos] = verticeAtual;
 		vLidos++;
-			
-		proxVertice = menorCaminho(verticeAtual,matriz); //retorna a coluna
-		linha = achaLinha(verticeAtual, proxVertice, matriz); //linha, coluna, retorna o vertice
-	
-		proxVertice = linha;	
-	}
+		int coluna = menorCaminho(verticeAtual,matriz); //retorna a coluna que tem o menor valor	
+		int valor = matriz[verticeAtual][coluna];
+		if(vLidos!=tVertices)
+		totalPercorido+=valor;
+		proxVertice = achaLinha(verticeAtual, coluna, matriz); //linha, coluna, retorna o vertice		
+	}while(vLidos < tVertices);
 
 	
 	printf("Vertices Lidos: %d\n",vLidos);
-	for(int i = 0; i < 5; i++){
-		printf("Leu -> %d	", jaPassou[i]+1);
-		if(i==0){
-			totalPercorido+=matriz[0][jaPassou[i]];
-		}else{
-			totalPercorido+=matriz[jaPassou[i-1]][jaPassou[i]];	
-		}		
-	}	
-	printf("\n\nTotal Percorido: %d\n",totalPercorido);
+
+	for(int i=0;i<5;i++){
+		printf("\njaPassou[%d] -> %d	",i, jaPassou[i]+1);
+	}
+	printf("\n\nTotal percorido: %d\n",totalPercorido);
 
 	return 0;
 }
