@@ -37,9 +37,9 @@ void BFS(int tab[][tam], int matriz[][tam], int v_atual, int vertices[]) { //faz
 }
 
 void desemfileira(int vetor[]) {
-    int i = 3;
+    int i = 7;
 
-    while(i != 0) {
+    while(i > 0) {
         vetor[i-1] = vetor[i];
         i--;
     }
@@ -47,12 +47,16 @@ void desemfileira(int vetor[]) {
 
 void procura(int tab[][tam], int matriz[][tam]) { //procura onde mapear
     int v_atual = 0, i = 0;
-    int fila[4] = {-1,-1,-1,-1}; //é o vertice atual
+    int fila[8] = {-1,-1,-1,-1,-1,-1,-1,-1}; //é o vertice atual
 
     while(i < tam) {
         desemfileira(fila);
         BFS(tab, matriz, v_atual, fila);
-        printf("N:%d|%d %d %d %d\n", i, fila[0], fila[1], fila[2], fila[3]);
+        for(int t = 0; t < 8; t++) {
+            printf("%d ", fila[t]);
+        }
+        printf("\n");
+
 
         v_atual = fila[0];
         i++;
@@ -102,7 +106,7 @@ int main() {                 /*a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q
     tabela[2][0] = cinza; //pinta de cinza
     */
     procura(tabela, matriz_a); //funcao de busca em largura
-    //imprime_tabela(tabela);
+    imprime_tabela(tabela);
 
 
     return 0;
