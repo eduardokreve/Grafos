@@ -6,7 +6,7 @@
 #define cinza 1
 #define preto 2 /*Cores Definidas: 0 == branco, 1 == cinza, 2 == preto */
 
-void gambi(int vetor[], int vert) { //é uma gambiarra mesmo
+void emfileira(int vetor[], int vert) { //é uma gambiarra mesmo
     int i = 0;
 
     while(1) {
@@ -23,7 +23,7 @@ void BFS(int tab[][tam], int matriz[][tam], int vertice, int vertices[]) { //faz
     int j = 0;
 
     for(j = 0; j < tam; j++) { //anda pelas colunas da matriz
-        if(matriz[vertice][j] == 1 && tab[2][j] != preto) { //se é ligado e não foi visitado
+        if(matriz[vertice][j] == 1 && tab[2][j] != preto && tab[0][j+2] == -1) { //se é ligado e não foi visitado
 
             if(tab[2][j] == branco) tab[2][j] = cinza; //colore
             else tab[2][j] = preto;
@@ -31,36 +31,42 @@ void BFS(int tab[][tam], int matriz[][tam], int vertice, int vertices[]) { //faz
             tab[0][j] = j; //distancia
             tab[1][j] = j-1; //vertice anterior
 
-            gambi(vertices, j);
+            emfileira(vertices, j);
         }
+    }
+}
+
+void desemfileira(int vetor[]) {
+    int i = 3;
+
+    while(i != 0) {
+        vetor[i-1] = vetor[i];
+        i--;
     }
 }
 
 void procura(int tab[][tam], int matriz[][tam]) { //procura onde mapear
-    int v_atual = 0;
-    int aux[4] = {-1,-1,-1,-1};
+    int v_atual = 0, i = 0;
+    int aux[4] = {-1,-1,-1,-1}; //é o vertice atual q
 
-    while(tab[3][tam] == branco) { //enquanto não pintar o ultimo vertice de outra cor
+    while(i < tam) {
         BFS(tab, matriz, v_atual, aux);
         printf("%d %d %d %d\n", aux[0], aux[1], aux[2], aux[3]);
-        
+
+        v_atual = aux[0];
+        desemfileira(aux);
+        i++;
     }
 }
 
 void imprime_tabela(int tabela[][tam]) {
-    printf("Vertices:  A B C D E F G H I J K L M N O P Q R S T Z\n");
-    for(int i = 0; i < coluna_tab -1; i++) {
-
-        if(i == 0)printf("distancia: ");
-        else if(i == 1) printf("vert.ante: ");
-        else if(i == 2) printf("Cor      : ");
-
-        for(int j = 0; j < tam; j++) {
-            printf("%d ", tabela[i][j]);
-        }
+    for(int j = 0; j < tam; j++) {
+        printf("Vertice  :%d\n", j);
+        printf("distancia:%d\n", tabela[0][j]);
+        printf("vert.ante:%d\n", tabela[1][j]);
+        printf("Cor      :%d\n", tabela[2][j]);
         printf("\n");
     }
-
 
 }
 int main() {                 /*a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, z*/
