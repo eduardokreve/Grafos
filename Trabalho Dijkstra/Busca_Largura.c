@@ -23,7 +23,7 @@ void BFS(int tab[][tam], int matriz[][tam], int vertice, int vertices[]) { //faz
     int j = 0;
 
     for(j = 0; j < tam; j++) { //anda pelas colunas da matriz
-        if(matriz[vertice][j] == 1 && tab[2][j] != preto && tab[0][j+2] == -1) { //se é ligado e não foi visitado
+        if(matriz[vertice][j] == 1 && tab[2][j] != preto ) { //se é ligado e não foi visitado
 
             if(tab[2][j] == branco) tab[2][j] = cinza; //colore
             else tab[2][j] = preto;
@@ -37,12 +37,10 @@ void BFS(int tab[][tam], int matriz[][tam], int vertice, int vertices[]) { //faz
 }
 
 void desemfileira(int vetor[]) {
-    int i = 3;
-
-    while(i != 0) {
-        vetor[i-1] = vetor[i];
-        i--;
-    }
+    vetor[0] = vetor[1];
+    vetor[1] = vetor[2];
+    vetor[2] = vetor[3];
+    vetor[3] = -1;
 }
 
 void procura(int tab[][tam], int matriz[][tam]) { //procura onde mapear
