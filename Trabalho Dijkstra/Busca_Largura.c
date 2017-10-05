@@ -6,7 +6,7 @@
 #define cinza 1
 #define preto 2 /*Cores Definidas: 0 == branco, 1 == cinza, 2 == preto */
 
-void emfileira(int vetor[], int vert) { //é uma gambiarra mesmo
+void emfileira(int vetor[], int vert) { //coloca na fila
     int i = 0;
 
     while(1) {
@@ -19,11 +19,11 @@ void emfileira(int vetor[], int vert) { //é uma gambiarra mesmo
 }
 
 /*Implementacao da funcao de busca em largura*/
-void BFS(int tab[][tam], int matriz[][tam], int vertice, int vertices[]) { //faz o mapeamento
+void BFS(int tab[][tam], int matriz[][tam], int v_atual, int vertices[]) { //faz o mapeamento
     int j = 0;
 
     for(j = 0; j < tam; j++) { //anda pelas colunas da matriz
-        if(matriz[vertice][j] == 1 && tab[2][j] != preto ) { //se é ligado e não foi visitado
+        if(matriz[v_atual][j] == 1 && tab[2][j] != preto && tab[0][j+2] == -1) { //se é ligado é preto
 
             if(tab[2][j] == branco) tab[2][j] = cinza; //colore
             else tab[2][j] = preto;
@@ -37,22 +37,24 @@ void BFS(int tab[][tam], int matriz[][tam], int vertice, int vertices[]) { //faz
 }
 
 void desemfileira(int vetor[]) {
-    vetor[0] = vetor[1];
-    vetor[1] = vetor[2];
-    vetor[2] = vetor[3];
-    vetor[3] = -1;
+    int i = 3;
+
+    while(i != 0) {
+        vetor[i-1] = vetor[i];
+        i--;
+    }
 }
 
 void procura(int tab[][tam], int matriz[][tam]) { //procura onde mapear
     int v_atual = 0, i = 0;
-    int aux[4] = {-1,-1,-1,-1}; //é o vertice atual q
+    int fila[4] = {-1,-1,-1,-1}; //é o vertice atual
 
     while(i < tam) {
-        BFS(tab, matriz, v_atual, aux);
-        printf("%d %d %d %d\n", aux[0], aux[1], aux[2], aux[3]);
+        desemfileira(fila);
+        BFS(tab, matriz, v_atual, fila);
+        printf("N:%d|%d %d %d %d\n", i, fila[0], fila[1], fila[2], fila[3]);
 
-        v_atual = aux[0];
-        desemfileira(aux);
+        v_atual = fila[0];
         i++;
     }
 }
@@ -100,7 +102,7 @@ int main() {                 /*a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q
     tabela[2][0] = cinza; //pinta de cinza
     */
     procura(tabela, matriz_a); //funcao de busca em largura
-    imprime_tabela(tabela);
+    //imprime_tabela(tabela);
 
 
     return 0;
