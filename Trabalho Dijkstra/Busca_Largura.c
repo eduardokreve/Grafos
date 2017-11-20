@@ -2,77 +2,73 @@
 #include <stdlib.h>
 #define tam 21
 #define coluna_tab 4
+ /*Cores Definidas*/
 #define branco 0
 #define cinza 1
-#define preto 2 /*Cores Definidas: 0 == branco, 1 == cinza, 2 == preto */
+#define preto 2
 
-void emfileira(int vetor[], int vert) { //coloca na fila
-    int i = 0;
 
-    while(1) {
-        if(vetor[i] == -1) {
-            vetor[i] = vert;
-            break;
+void mapeia(int tab[][tam], int matriz[][tam]) { //mapeia o grafo e insere os valores na tabela
+    int stop, i = 0, j = 0, coluna = 0; //i -> linha, j-> coluna
+	
+    for(stop = 0; stop < tam-1; ) { //laço principal, para quando a tabela estiver preenchida
+
+        for(j = 0; j < tam; j++) { //anda pelas colunas da matriz
+            if(matriz[i][j] == 1 && tab[2][j] == branco) { //se é ligado e não foi visitado
+                //atribui os valores na tabela
+                tab[0][j] = tab[0][i] +1; //distancia
+                tab[1][j] = i+1; //vertice anterior
+                tab[2][j] = cinza; //colore
+                tab[3][coluna++] = j+1; //vertice atual
+            }
         }
-        i++;
-    }
-}
 
-/*Implementacao da funcao de busca em largura*/
-void BFS(int tab[][tam], int matriz[][tam], int v_atual, int vertices[]) { //faz o mapeamento
-    int j = 0;
-
-    for(j = 0; j < tam; j++) { //anda pelas colunas da matriz
-        if(matriz[v_atual][j] == 1 && tab[2][j] != preto && tab[0][j+2] == -1) { //se é ligado é preto
-
-            if(tab[2][j] == branco) tab[2][j] = cinza; //colore
-            else tab[2][j] = preto;
-
-            tab[0][j] = j; //distancia
-            tab[1][j] = j-1; //vertice anterior
-
-            emfileira(vertices, j);
+        for(i = 0; i <= coluna; i++) {
+            if(tab[3][i] != branco) { //se o vertice atual estiver preenchido
+                j = i;
+                i = tab[3][i] -1;
+                stop++; //incremento do laço principal
+                tab[2][i] = preto; //colore
+                tab[3][j] = 0;
+                break;
+            }
         }
     }
 }
 
-void desemfileira(int vetor[]) {
-    int i = 7;
+void menor_caminho(int tabela[][tam], char letras[tam]) { //mostra o menor caminho entre 0 e 20(A e Z)
+    int pos = tam-1, i = 0;
+    int vet[10];
 
-    while(i > 0) {
-        vetor[i-1] = vetor[i];
-        i--;
+    printf("\nMenor Caminho:\n");
+    while(pos >= 0) { //enquanto nao chegar ao inicio (começa do fim, posicao 20)
+        vet[i] = tabela[1][pos]; //recebe o vertice anterior
+        pos = tabela[1][pos] -1;
+        i++; //quantidade de vertices que fazem parte do menor caminho
     }
+
+    printf("z ");
+
+    for(int j = 0; j < i-1; j++) { //imprime o menor caminho
+        printf("<-- %c ", letras[vet[j]]-1);
+    }
+    printf("\n\n");
 }
 
-void procura(int tab[][tam], int matriz[][tam]) { //procura onde mapear
-    int v_atual = 0, i = 0;
-    int fila[8] = {-1,-1,-1,-1,-1,-1,-1,-1}; //é o vertice atual
+void imprime_tabela(int tabela[][tam], char letras[tam]) {
 
-    while(i < tam) {
-        desemfileira(fila);
-        BFS(tab, matriz, v_atual, fila);
-        for(int t = 0; t < 8; t++) {
-            printf("%d ", fila[t]);
-        }
-        printf("\n");
-
-
-        v_atual = fila[0];
-        i++;
-    }
-}
-
-void imprime_tabela(int tabela[][tam]) {
     for(int j = 0; j < tam; j++) {
-        printf("Vertice  :%d\n", j);
-        printf("distancia:%d\n", tabela[0][j]);
-        printf("vert.ante:%d\n", tabela[1][j]);
-        printf("Cor      :%d\n", tabela[2][j]);
-        printf("\n");
+        printf("__________________________________________________________\n\b");
+        printf("Vertice :%c\t", letras[j]);
+        printf("distancia :%d\t", tabela[0][j]);
+        printf("vert.ante :%c\t", letras[tabela[1][j]]-1);
+        if(tabela[2][j] == 0) printf("Cor :branco\t");
+        else if(tabela[2][j] == 1) printf("Cor :cinza\t");
+        else if(tabela[2][j] == 2) printf("Cor :preto\t");
+        printf("\n" );
     }
-
 }
+
 int main() {                 /*a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, z*/
     int matriz_a[tam][tam] = {{0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},//a
                               {1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},//b
@@ -96,18 +92,19 @@ int main() {                 /*a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q
                               {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1},//t
                               {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0}};//z
 
-    int tabela[coluna_tab][tam] = {{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},//distancia
-                                   {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},//vert. anterior
+    int tabela[coluna_tab][tam] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},//distancia
+                                   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},//vert. anterior
                                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},//cor
-                                   {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}};//vert. atual
+                                   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};//vert. atual
 
-    /*declaração do primeiro vertice(origem)
-    tabela[0][0] = 0; //distancia
-    tabela[2][0] = cinza; //pinta de cinza
-    */
-    procura(tabela, matriz_a); //funcao de busca em largura
-    imprime_tabela(tabela);
+    char letras[tam] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','z'};
 
+    /*declaração do primeiro vertice(origem)*/
+    tabela[2][0] = preto; //pinta de preto, porque não começa por ele
+
+    mapeia(tabela, matriz_a); //funcao de busca em largura
+    imprime_tabela(tabela, letras);
+    menor_caminho(tabela, letras);
 
     return 0;
 }
