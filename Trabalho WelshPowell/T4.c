@@ -60,38 +60,6 @@ void calculaGrau(int mat[tam][tam], int tab[][tam]) {
     }
 }
 
-//verifica com qual vertices o vertice N esta ligado
-void pesqLigacao(int n, int vert[tam], int mat[][tam]) {
-    int i, j = 0;
-
-    for (i = 0; i < tam; i++) {
-        if(mat[n][i] == 1) { //se esta ligado
-            vert[j] = i;
-            j++;
-        }
-    }
-}
-
-//anda pela matriz e vai preenchendo a tabela conforme alg. de Welsh & Powel
-void WelshPowel(int mat[tam][tam], int tab[][tam]) {
-    int i, j, cor = 1;
-    int vertLig[tam] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
-
-
-    tab[2][0] = cor; //pinta o 1° vertice da lista com cor 1
-
-    pesqLigacao(tab[0][0], vertLig, mat);
-
-
-
-    for (j = 0; j < tam; j++) {
-
-    }
-
-
-
-}
-
 int main() {               //A  B  C  D  E  F  G  H  I  J  K
     int matriz[tam][tam] = {{0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0}, //A
                             {1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0}, //B
@@ -108,18 +76,16 @@ int main() {               //A  B  C  D  E  F  G  H  I  J  K
                          //A  B  C  D  E  F  G  H  I  J  K
     int tabela[3][tam] = {{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, //vertices
                           {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}, //grau
-                          {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}};//cor
+                          {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};//cor
 
     /*1° PASSO */
     calculaGrau(matriz, tabela);
+    printf("ORIGINAL:\n");
     imprimeTabela(tabela);
     /*2° PASSO */
     ordenaTabela(tabela);
+    printf("TABELA ORDENADA:\n");
     imprimeTabela(tabela);
-    /*3° PASSO */
-    WelshPowel(matriz, tabela);
-
-
 
 
 
